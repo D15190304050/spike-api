@@ -1,0 +1,5 @@
+# Project exclude paths
+/spike-api-dao/target/
+/spike-api-rpc/target/
+/spike-api-service/target/
+/spike-api-web/target/
