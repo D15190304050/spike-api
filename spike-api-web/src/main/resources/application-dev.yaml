@@ -1,0 +1,10 @@
+spring:
+    datasource:
+        druid:
+            driver-class-name: com.mysql.cj.jdbc.Driver
+            url: jdbc:mysql://localhost:3306/spike?useUnicode=true&characterEncoding=utf8
+            username: DinoStark
+            password: non-feeling
+    redis:
+        host: localhost
+        port: 6379
