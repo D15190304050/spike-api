@@ -40,6 +40,17 @@
         </dependency>
 
         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
             <groupId>com.auth0</groupId>
             <artifactId>java-jwt</artifactId>
         </dependency>
@@ -57,13 +68,13 @@
         </dependency>
 
         <dependency>
-            <groupId>org.dataworks</groupId>
-            <artifactId>dataworks</artifactId>
+            <groupId>stark.dataworks</groupId>
+            <artifactId>dataworks-basic</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>org.dataworks</groupId>
-            <artifactId>dataworks-web</artifactId>
+            <groupId>stark.dataworks</groupId>
+            <artifactId>dataworks-spring-boot</artifactId>
         </dependency>
     </dependencies>
 </project>

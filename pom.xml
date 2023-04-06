@@ -53,15 +53,15 @@
             </dependency>
 
             <dependency>
-                <groupId>org.dataworks</groupId>
-                <artifactId>dataworks</artifactId>
-                <version>${dataworks.version}</version>
+                <groupId>stark.dataworks</groupId>
+                <artifactId>dataworks-basic</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
             </dependency>
 
             <dependency>
-                <groupId>org.dataworks</groupId>
-                <artifactId>dataworks-web</artifactId>
-                <version>${dataworks.version}</version>
+                <groupId>stark.dataworks</groupId>
+                <artifactId>dataworks-spring-boot</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
             </dependency>
 
             <dependency>
