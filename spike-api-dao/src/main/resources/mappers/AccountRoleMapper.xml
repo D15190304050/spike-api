@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="stark.reshaper.spike.dao.AccountRoleMapper">
+    <resultMap id="BaseResultMap" type="stark.reshaper.spike.domain.AccountRole">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="account_id" jdbcType="BIGINT" property="accountId"/>
+        <result column="role_id" jdbcType="BIGINT" property="roleId"/>
+        <result column="state" jdbcType="INTEGER" property="state"/>
+        <result column="creation_time" jdbcType="TIMESTAMP" property="creationTime"/>
+        <result column="creator_id" jdbcType="BIGINT" property="creatorId"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="updater_id" jdbcType="BIGINT" property="updaterId"/>
+    </resultMap>
+
+    <select id="getRoleIdsByAccountId" resultType="long">
+        SELECT role_id
+        FROM account_role
+        WHERE account_id = #{accountId}
+    </select>
+</mapper>

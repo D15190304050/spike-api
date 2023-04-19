@@ -8,6 +8,7 @@ CREATE TABLE `account_base_info`
     `nickname`           VARCHAR(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT 'Nickname.',
     `avatar_url`         VARCHAR(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT 'URL of avatar.',
     `state`              INT                                                    NOT NULL DEFAULT 0 COMMENT 'State of the account: 0 - normal; 1 - deleted',
+    `creation_time`      DATETIME                                               NOT NULL DEFAULT NOW() COMMENT 'Creation time (registry time) of the account.',
     `update_time`        DATETIME                                               NOT NULL DEFAULT NOW() COMMENT 'Last update time.',
     KEY `idx_username` (`username`),
     KEY `idx_phone_number` (`phone_number`)
@@ -16,3 +17,7 @@ CREATE TABLE `account_base_info`
     DEFAULT CHARSET = utf8mb4
     COLLATE = utf8mb4_bin
     COMMENT = 'Base information of accounts.';
+
+INSERT INTO `account_base_info`
+(phone_number, encrypted_password, username, nickname, avatar_url)
+VALUES ('13845123695', '{noop}123', 'admin', 'Admin', 'no_url');

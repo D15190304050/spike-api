@@ -7,11 +7,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RestController
-@RequestMapping("/hello")
 public class HelloController
 {
     @GetMapping("/hello")
     public String sayHello()
+    {
+        return "hello";
+    }
+
+    @GetMapping("/token-hello")
+    public String tokenHello()
     {
         return "hello";
     }

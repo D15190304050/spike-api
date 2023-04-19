@@ -1,4 +1,4 @@
-CREATE FUNCTION `GET_CHILDREN_DIRECTORY_IDS`(rootId VARCHAR(100))
+CREATE FUNCTION `GET_CHILDREN_ROLE_IDS`(rootId VARCHAR(100))
     RETURNS VARCHAR(2000) READS SQL DATA
 BEGIN
     DECLARE result VARCHAR(2000);
@@ -7,7 +7,7 @@ BEGIN
     SET childrenIds = rootId;
     WHILE childrenIds is not null DO
             SET result = concat(result, ',', childrenIds);
-            SELECT group_concat(id) INTO childrenIds FROM `user_directory` where FIND_IN_SET(parent_id, childrenIds);
+            SELECT group_concat(id) INTO childrenIds FROM `role` where FIND_IN_SET(parent_id, childrenIds);
         END WHILE;
     RETURN SUBSTR(result, 3);
 END;

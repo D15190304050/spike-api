@@ -69,12 +69,13 @@
 
         <dependency>
             <groupId>stark.dataworks</groupId>
-            <artifactId>dataworks-basic</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>stark.dataworks</groupId>
-            <artifactId>dataworks-spring-boot</artifactId>
+            <artifactId>easy-minio</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.squareup.okhttp3</groupId>
+                    <artifactId>okhttp</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
 </project>
