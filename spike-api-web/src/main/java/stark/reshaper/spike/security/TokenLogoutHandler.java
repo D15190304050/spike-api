@@ -22,6 +22,9 @@ public class TokenLogoutHandler implements LogoutHandler
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
 
+    @Autowired
+    private RedisKeyManager redisKeyManager;
+
     @Override
     public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication)
     {
@@ -34,7 +37,7 @@ public class TokenLogoutHandler implements LogoutHandler
             if (accountPrincipal != null)
             {
                 long accountId = accountPrincipal.getAccountId();
-                redisTemplate.delete(RedisKeyManager.getUserIdKey(accountId));
+                redisTemplate.delete(redisKeyManager.getUserIdKey(accountId));
             }
         }
     }

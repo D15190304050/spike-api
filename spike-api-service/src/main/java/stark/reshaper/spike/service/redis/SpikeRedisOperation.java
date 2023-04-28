@@ -14,10 +14,13 @@ public class SpikeRedisOperation
     @Autowired
     private RedisQuickOperation redisQuickOperation;
 
+    @Autowired
+    private RedisKeyManager redisKeyManager;
+
     public void cacheUser(User user)
     {
         long userId = user.getId();
-        String userIdKey = RedisKeyManager.getUserIdKey(userId);
+        String userIdKey = redisKeyManager.getUserIdKey(userId);
         redisQuickOperation.set(userIdKey, user, JwtService.TOKEN_EXPIRATION_IN_DAY, TimeUnit.DAYS);
     }
 }

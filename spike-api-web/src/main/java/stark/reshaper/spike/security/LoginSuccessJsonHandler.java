@@ -31,6 +31,9 @@ public class LoginSuccessJsonHandler implements AuthenticationSuccessHandler
     @Autowired
     private RedisQuickOperation redisQuickOperation;
 
+    @Autowired
+    private RedisKeyManager redisKeyManager;
+
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException
     {
@@ -56,7 +59,7 @@ public class LoginSuccessJsonHandler implements AuthenticationSuccessHandler
     public void cacheAuthentication(User user)
     {
         long userId = user.getId();
-        String userIdKey = RedisKeyManager.getUserIdKey(userId);
+        String userIdKey = redisKeyManager.getUserIdKey(userId);
 
         redisQuickOperation.set(userIdKey, user, JwtService.TOKEN_EXPIRATION_IN_DAY, TimeUnit.DAYS);
     }

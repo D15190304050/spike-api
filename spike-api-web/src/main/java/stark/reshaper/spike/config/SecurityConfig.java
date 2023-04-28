@@ -22,6 +22,7 @@ import stark.reshaper.spike.security.filter.UsernamePasswordLoginFilter;
 import stark.reshaper.spike.service.DaoUserDetailService;
 import stark.reshaper.spike.service.JwtService;
 import stark.reshaper.spike.service.constants.SecurityConstants;
+import stark.reshaper.spike.service.redis.RedisKeyManager;
 import stark.reshaper.spike.service.redis.SpikeRedisOperation;
 
 @Slf4j
@@ -60,6 +61,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
 
     @Autowired
     private SpikeRedisOperation spikeRedisOperation;
+
+    @Autowired
+    private RedisKeyManager redisKeyManager;
 
     @Override
     @Bean
@@ -120,7 +124,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         ;
 
-        http.addFilterBefore(new TokenLoginFilter(jwtService, redisQuickOperation, daoUserDetailService, spikeRedisOperation, contextPath), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(new TokenLoginFilter(jwtService, redisQuickOperation, daoUserDetailService, spikeRedisOperation, contextPath, redisKeyManager), UsernamePasswordAuthenticationFilter.class);
         http.addFilterAt(usernamePasswordLoginFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 }

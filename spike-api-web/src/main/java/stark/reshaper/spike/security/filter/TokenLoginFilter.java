@@ -32,14 +32,16 @@ public class TokenLoginFilter extends OncePerRequestFilter
     private final RedisQuickOperation redisQuickOperation;
     private final UserDetailsService userDetailsService;
     private final SpikeRedisOperation spikeRedisOperation;
+    private final RedisKeyManager redisKeyManager;
     private final List<String> ignoreUris;
 
-    public TokenLoginFilter(JwtService jwtService, RedisQuickOperation redisQuickOperation, UserDetailsService userDetailsService, SpikeRedisOperation spikeRedisOperation, String contextPath)
+    public TokenLoginFilter(JwtService jwtService, RedisQuickOperation redisQuickOperation, UserDetailsService userDetailsService, SpikeRedisOperation spikeRedisOperation, String contextPath, RedisKeyManager redisKeyManager)
     {
         this.jwtService = jwtService;
         this.redisQuickOperation = redisQuickOperation;
         this.userDetailsService = userDetailsService;
         this.spikeRedisOperation = spikeRedisOperation;
+        this.redisKeyManager = redisKeyManager;
 
         ignoreUris = new ArrayList<>();
         for (String uri : SecurityConstants.NON_AUTHENTICATE_URIS)
@@ -65,7 +67,7 @@ public class TokenLoginFilter extends OncePerRequestFilter
             if (accountPrincipal != null)
             {
                 long accountId = accountPrincipal.getAccountId();
-                String userJson = redisQuickOperation.get(RedisKeyManager.getUserIdKey(accountId));
+                String userJson = redisQuickOperation.get(redisKeyManager.getUserIdKey(accountId));
                 User user;
 
                 if (StringUtils.hasText(userJson))
