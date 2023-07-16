@@ -6,7 +6,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.stereotype.Component;
-import stark.dataworks.basic.ExceptionInfoFormatter;
+import stark.dataworks.basic.exceptions.ExceptionInfoFormatter;
 import stark.dataworks.basic.data.json.JsonSerializer;
 import stark.dataworks.boot.web.ServiceResponse;
 import stark.reshaper.spike.service.constants.SecurityConstants;

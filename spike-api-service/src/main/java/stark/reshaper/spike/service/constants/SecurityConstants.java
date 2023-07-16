@@ -18,5 +18,7 @@ public class SecurityConstants
     public static final String DEFAULT_LOGIN_URI = "/login";
     public static final String DEFAULT_LOGOUT_URI = "/logout";
 
-    public static final String[] NON_AUTHENTICATE_URIS = {"/hello", "/captcha", "/upload-avatar"};
+    public static final String SSO_COOKIE_NAME = "spike_sso";
+
+    public static final String[] NON_AUTHENTICATE_URIS = {"/hello", "/account/captcha", "/account/register"};
 }

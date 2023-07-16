@@ -58,6 +58,10 @@ public class DaoUserDetailService implements UserDetailsService, UserDetailsPass
         user.setUsername(accountBaseInfo.getUsername());
         user.setPassword(accountBaseInfo.getEncryptedPassword());
         user.setId(accountBaseInfo.getId());
+        user.setNickname(accountBaseInfo.getNickname());
+        user.setAvatarUrl(accountBaseInfo.getAvatarUrl());
+        user.setEmail(accountBaseInfo.getEmail());
+        user.setGender(accountBaseInfo.getGender());
 
         List<Long> rootRoleIds = accountRoleMapper.getRoleIdsByAccountId(accountBaseInfo.getId());
 

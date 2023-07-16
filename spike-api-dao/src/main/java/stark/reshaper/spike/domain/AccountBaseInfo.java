@@ -12,18 +12,15 @@ import java.util.Date;
 public class AccountBaseInfo
 {
     private long id;
-
     private String phoneNumber;
-
     private String encryptedPassword;
-
     private String username;
-
     private String nickname;
-
     private String avatarUrl;
-
+    private String email;
+    private String phoneNumberPrefix;
+    private String gender;
     private int state;
-
+    private Date creationTime;
     private Date updateTime;
 }

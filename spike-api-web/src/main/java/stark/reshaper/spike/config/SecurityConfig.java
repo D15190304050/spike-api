@@ -28,7 +28,7 @@ import stark.reshaper.spike.service.redis.SpikeRedisOperation;
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter
 {
-    @Value("${server.servlet.context-path}")
+    @Value("")
     private String contextPath;
 
     @Autowired
