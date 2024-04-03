@@ -184,31 +184,32 @@ public class AccountService //implements IAccountService
         return true;
     }
 
-    public void validateToken(HttpServletResponse response) throws IOException
+    public void validateToken(HttpServletResponse response, String ssoCookie) throws IOException
     {
-        Authentication authentication = UserContextService.getAuthentication();
         ServiceResponse<LoginState> serviceResponse = new ServiceResponse<>();
 
-        if (authentication != null && authentication.isAuthenticated())
+        if (StringUtils.hasText(ssoCookie))
         {
-            Object principal = authentication.getPrincipal();
-            log.info("principal = " + JsonSerializer.serialize(principal));
+            AccountPrincipal accountPrincipal = jwtService.parseAccountPrincipal(ssoCookie);
 
-            AccountPrincipal accountPrincipal = new AccountPrincipal((User) principal);
-            String token = jwtService.createToken(accountPrincipal);
-            response.addCookie(new Cookie(SecurityConstants.SSO_COOKIE_NAME, token));
+            if (accountPrincipal != null)
+            {
+                String token = jwtService.createToken(accountPrincipal);
+                response.addCookie(new Cookie(SecurityConstants.SSO_COOKIE_NAME, token));
 
-            LoginState loginState = new LoginState();
-            loginState.setToken(token);
+                LoginState loginState = new LoginState();
+                loginState.setToken(token);
 
-            serviceResponse.setSuccess(true);
-            serviceResponse.setData(loginState);
+                serviceResponse.setSuccess(true);
+                serviceResponse.setData(loginState);
+            }
+            else
+                serviceResponse.setSuccess(false);
         }
         else
             serviceResponse.setSuccess(false);
 
-        String resultJson = JsonSerializer.serialize(serviceResponse);
-        response.getWriter().println(resultJson);
-        response.flushBuffer();
+        log.info("Response of validateToken() = " + JsonSerializer.serialize(serviceResponse));
+        serviceResponse.writeToResponse(response);
     }
 }

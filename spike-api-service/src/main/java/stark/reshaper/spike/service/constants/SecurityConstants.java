@@ -22,5 +22,5 @@ public class SecurityConstants
     public static final String SSO_COOKIE_NAME = "spike_sso";
     public static final String REDIRECT_URL = "redirect_url";
 
-    public static final String[] NON_AUTHENTICATE_URIS = {"/hello", "/account/captcha", "/account/register"};
+    public static final String[] NON_AUTHENTICATE_URIS = {"/hello", "/account/captcha", "/account/register", "/account/validate-token"};
 }

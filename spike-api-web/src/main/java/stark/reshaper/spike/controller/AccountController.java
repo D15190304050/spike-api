@@ -7,6 +7,7 @@ import stark.dataworks.basic.data.json.JsonSerializer;
 import stark.dataworks.boot.web.ServiceResponse;
 import stark.reshaper.spike.service.AccountService;
 import stark.reshaper.spike.service.CaptchaService;
+import stark.reshaper.spike.service.constants.SecurityConstants;
 import stark.reshaper.spike.service.dto.params.RegistrationRequest;
 import stark.reshaper.spike.service.dto.results.CaptchaResponse;
 
@@ -39,8 +40,8 @@ public class AccountController
     }
 
     @GetMapping("/validate-token")
-    public void validateToken(HttpServletResponse response) throws IOException
+    public void validateToken(HttpServletResponse response, @CookieValue(value = SecurityConstants.SSO_COOKIE_NAME, required = false) String ssoCookie) throws IOException
     {
-        accountService.validateToken(response);
+        accountService.validateToken(response, ssoCookie);
     }
 }
