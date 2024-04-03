@@ -5,6 +5,12 @@ import com.auth0.jwt.JWTCreator;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.context.WebServerInitializedEvent;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 import stark.reshaper.spike.service.constants.SecurityConstants;
 import stark.reshaper.spike.service.dto.AccountPrincipal;
@@ -12,22 +18,16 @@ import stark.reshaper.spike.service.dto.AccountPrincipal;
 import java.util.Calendar;
 
 @Component
-public class JwtService
+public class JwtService implements ApplicationContextAware, ApplicationListener<WebServerInitializedEvent>
 {
+    public static final int TOKEN_EXPIRATION_IN_DAY = 30;
 
-    public static final int TOKEN_EXPIRATION_IN_DAY = 1;
-    public static final String SECRET = "q4~@x2uC$f@M2x*^e5&DB^L!3~)6@+";
+    @Value("${spike.jwt-secret}")
+    public String secret;
 
-    private final JWTCreator.Builder builder;
-    private final JWTVerifier verifier;
-    private final Algorithm jwtAlgorithm;
-
-    public JwtService()
-    {
-        builder = JWT.create();
-        jwtAlgorithm = Algorithm.HMAC256(SECRET);
-        verifier = JWT.require(jwtAlgorithm).build();
-    }
+    private JWTCreator.Builder builder;
+    private JWTVerifier verifier;
+    private Algorithm jwtAlgorithm;
 
     public String createToken(AccountPrincipal accountPrincipal)
     {
@@ -36,6 +36,7 @@ public class JwtService
 
         builder.withClaim(SecurityConstants.ACCOUNT_ID, accountPrincipal.getAccountId());
         builder.withClaim(SecurityConstants.USERNAME, accountPrincipal.getUsername());
+        builder.withClaim(SecurityConstants.NICKNAME, accountPrincipal.getNickname());
 
         return builder.withExpiresAt(expirationTime.getTime()).sign(jwtAlgorithm);
     }
@@ -50,9 +51,24 @@ public class JwtService
         DecodedJWT decodedJwt = verify(token);
         Long accountId = decodedJwt.getClaim(SecurityConstants.ACCOUNT_ID).asLong();
         String username = decodedJwt.getClaim(SecurityConstants.USERNAME).asString();
+        String nickname = decodedJwt.getClaim(SecurityConstants.NICKNAME).asString();
 
         if (accountId != null && username != null)
-            return new AccountPrincipal(accountId, username);
+            return new AccountPrincipal(accountId, username, nickname);
         return null;
+    }
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException
+    {
+
+    }
+
+    @Override
+    public void onApplicationEvent(WebServerInitializedEvent event)
+    {
+        builder = JWT.create();
+        jwtAlgorithm = Algorithm.HMAC256(secret);
+        verifier = JWT.require(jwtAlgorithm).build();
     }
 }

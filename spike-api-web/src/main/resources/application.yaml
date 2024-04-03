@@ -1,5 +1,5 @@
 server:
-    port: 6543
+    port: 9543
 
 spring:
     profiles:

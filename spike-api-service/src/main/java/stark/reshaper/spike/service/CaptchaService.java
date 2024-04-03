@@ -10,7 +10,7 @@ import org.springframework.util.FastByteArrayOutputStream;
 import stark.dataworks.basic.data.redis.RedisQuickOperation;
 import stark.dataworks.boot.autoconfig.web.LogArgumentsAndResponse;
 import stark.dataworks.boot.web.ServiceResponse;
-import stark.reshaper.spike.service.dto.responses.CaptchaResponse;
+import stark.reshaper.spike.service.dto.results.CaptchaResponse;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletResponse;
@@ -37,7 +37,7 @@ public class CaptchaService
         BufferedImage captchaImage = captchaProducer.createImage(captchaText);
         FastByteArrayOutputStream outputStream = new FastByteArrayOutputStream();
         ImageIO.write(captchaImage, "jpg", outputStream);
-        String captchaBytes = Base64Utils.encodeToString(outputStream.toByteArray());
+        String captchaBytes = "data:image/jpeg;base64," + Base64Utils.encodeToString(outputStream.toByteArray());
 
         String captchaId = UUID.randomUUID().toString();
         redisQuickOperation.set(captchaId, captchaText, 5, TimeUnit.MINUTES);

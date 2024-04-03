@@ -10,6 +10,7 @@ public class SecurityConstants
     public static final String ACCOUNT_ID = "accountId";
     public static final String ROLE_PREFIX = "ROLE_";
     public static final String USERNAME = "username";
+    public static final String NICKNAME = "nickname";
     public static final String PASSWORD = "password";
     public static final String REMEMBER_ME = "rememberMe";
     public static final String TOKEN_HEADER = HttpHeaders.AUTHORIZATION;
@@ -19,6 +20,7 @@ public class SecurityConstants
     public static final String DEFAULT_LOGOUT_URI = "/logout";
 
     public static final String SSO_COOKIE_NAME = "spike_sso";
+    public static final String REDIRECT_URL = "redirect_url";
 
     public static final String[] NON_AUTHENTICATE_URIS = {"/hello", "/account/captcha", "/account/register"};
 }

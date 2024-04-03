@@ -10,6 +10,7 @@ import stark.dataworks.basic.exceptions.ExceptionInfoFormatter;
 import stark.dataworks.basic.data.json.JsonSerializer;
 import stark.dataworks.boot.web.ServiceResponse;
 import stark.reshaper.spike.service.constants.SecurityConstants;
+import stark.reshaper.spike.service.dto.results.LoginState;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -29,7 +30,7 @@ public class LoginFailureJsonHandler implements AuthenticationFailureHandler
         String exceptionInfo = ExceptionInfoFormatter.formatMessageAndStackTrace(exception);
         log.error("Login failure: " + exceptionInfo);
 
-        ServiceResponse<Boolean> loginResult = ServiceResponse.buildErrorResponse(-1, exceptionInfo);
+        ServiceResponse<LoginState> loginResult = ServiceResponse.buildErrorResponse(-1, exceptionInfo);
         String resultJson = JsonSerializer.serialize(loginResult);
         response.getWriter().println(resultJson);
         response.flushBuffer();

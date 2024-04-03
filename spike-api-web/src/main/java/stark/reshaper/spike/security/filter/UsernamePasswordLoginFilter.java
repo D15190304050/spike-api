@@ -2,6 +2,7 @@ package stark.reshaper.spike.security.filter;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -10,6 +11,8 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.util.StringUtils;
+import org.springframework.web.context.request.RequestContextHolder;
 import stark.dataworks.basic.data.json.JsonSerializer;
 import stark.dataworks.basic.data.redis.RedisQuickOperation;
 import stark.dataworks.boot.ExceptionLogger;
@@ -32,7 +35,7 @@ public class UsernamePasswordLoginFilter extends UsernamePasswordAuthenticationF
 
         // 1.
         String requestMethod = request.getMethod();
-        if (!requestMethod.equals("POST"))
+        if (!requestMethod.equalsIgnoreCase(HttpMethod.POST.name()))
             throw new AuthenticationServiceException("Authentication method not supported: " + requestMethod);
 
         // 2.
@@ -48,6 +51,11 @@ public class UsernamePasswordLoginFilter extends UsernamePasswordAuthenticationF
                 request.setAttribute(SecurityConstants.REMEMBER_ME, rememberMe);
                 UsernamePasswordAuthenticationToken authenticationRequest = new UsernamePasswordAuthenticationToken(username, password);
                 setDetails(request, authenticationRequest);
+
+                String redirectUrl = loginInfo.getRedirectUrl();
+                if (StringUtils.hasText(redirectUrl))
+                    request.setAttribute(SecurityConstants.REDIRECT_URL, redirectUrl);
+
                 return getAuthenticationManager().authenticate(authenticationRequest);
             }
             catch (IOException e)

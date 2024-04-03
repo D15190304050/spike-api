@@ -1,4 +1,4 @@
-package stark.reshaper.spike.service.dto.responses;
+package stark.reshaper.spike.service.dto.results;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

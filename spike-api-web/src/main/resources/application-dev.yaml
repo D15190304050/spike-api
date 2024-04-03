@@ -8,10 +8,15 @@ spring:
     redis:
         host: localhost
         port: 6379
+#        port: 9736
     cloud:
         nacos:
             discovery:
                 server-addr: localhost:8848
+
+spike:
+    sso-address: http://localhost:3100/login
+    jwt-secret: q4~@x2uC$f@M2x*^e5&DB^L!3~)6@+
 
 dubbo:
     application:

@@ -11,4 +11,10 @@ public class AccountPrincipal
 {
     private long accountId;
     private String username;
+    private String nickname;
+
+    public AccountPrincipal(User user)
+    {
+        this(user.getId(), user.getUsername(), user.getNickname());
+    }
 }

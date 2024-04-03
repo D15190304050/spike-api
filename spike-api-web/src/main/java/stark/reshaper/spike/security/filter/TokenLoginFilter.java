@@ -9,7 +9,9 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 import stark.dataworks.basic.data.json.JsonSerializer;
 import stark.dataworks.basic.data.redis.RedisQuickOperation;
+import stark.dataworks.boot.web.TokenHandler;
 import stark.reshaper.spike.service.JwtService;
+import stark.reshaper.spike.service.UserContextService;
 import stark.reshaper.spike.service.constants.SecurityConstants;
 import stark.reshaper.spike.service.dto.AccountPrincipal;
 import stark.reshaper.spike.service.dto.User;
@@ -18,6 +20,7 @@ import stark.reshaper.spike.service.redis.SpikeRedisOperation;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -27,7 +30,6 @@ import java.util.List;
 @Slf4j
 public class TokenLoginFilter extends OncePerRequestFilter
 {
-
     private final JwtService jwtService;
     private final RedisQuickOperation redisQuickOperation;
     private final UserDetailsService userDetailsService;
@@ -59,7 +61,7 @@ public class TokenLoginFilter extends OncePerRequestFilter
             return;
         }
 
-        String token = request.getHeader(HttpHeaders.AUTHORIZATION);
+        String token = TokenHandler.getToken(request, SecurityConstants.SSO_COOKIE_NAME);
 
         if (StringUtils.hasText(token))
         {
@@ -79,7 +81,7 @@ public class TokenLoginFilter extends OncePerRequestFilter
                 }
 
                 UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(user, user.getPassword(), user.getAuthorities());
-                SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+                UserContextService.setAuthentication(authenticationToken);
             }
         }
 

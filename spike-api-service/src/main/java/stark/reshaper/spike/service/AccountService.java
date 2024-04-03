@@ -2,11 +2,14 @@ package stark.reshaper.spike.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
+import stark.dataworks.basic.data.json.JsonSerializer;
 import stark.dataworks.basic.data.redis.RedisQuickOperation;
 import stark.dataworks.basic.params.OutValue;
 import stark.dataworks.boot.autoconfig.web.LogArgumentsAndResponse;
@@ -15,8 +18,13 @@ import stark.reshaper.spike.dao.AccountBaseInfoMapper;
 import stark.reshaper.spike.domain.AccountBaseInfo;
 import stark.reshaper.spike.service.constants.Genders;
 import stark.reshaper.spike.service.constants.PhoneNumberPrefixes;
-import stark.reshaper.spike.service.dto.requests.RegistrationRequest;
+import stark.reshaper.spike.service.constants.SecurityConstants;
+import stark.reshaper.spike.service.dto.AccountPrincipal;
+import stark.reshaper.spike.service.dto.User;
+import stark.reshaper.spike.service.dto.params.RegistrationRequest;
+import stark.reshaper.spike.service.dto.results.LoginState;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
@@ -30,6 +38,12 @@ import java.util.Locale;
 @LogArgumentsAndResponse
 public class AccountService //implements IAccountService
 {
+    @Value("${spike.sso-address}")
+    private String ssoLoginUrl;
+
+    @Value("${sso-cookie-name}")
+    private String ssoCookieName;
+
     @Autowired
     private RedisQuickOperation redisQuickOperation;
 
@@ -38,6 +52,9 @@ public class AccountService //implements IAccountService
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private JwtService jwtService;
 
     public ServiceResponse<Boolean> register(@Valid RegistrationRequest registrationRequest)
     {
@@ -167,14 +184,31 @@ public class AccountService //implements IAccountService
         return true;
     }
 
-    public void tryLogin(HttpServletResponse response, String ssoUserIdKey) throws IOException
+    public void validateToken(HttpServletResponse response) throws IOException
     {
-        if (ssoUserIdKey != null)
-        {
-            String userIdString = redisQuickOperation.get(ssoUserIdKey);
-//            long
-        }
+        Authentication authentication = UserContextService.getAuthentication();
+        ServiceResponse<LoginState> serviceResponse = new ServiceResponse<>();
 
-        response.sendRedirect("");
+        if (authentication != null && authentication.isAuthenticated())
+        {
+            Object principal = authentication.getPrincipal();
+            log.info("principal = " + JsonSerializer.serialize(principal));
+
+            AccountPrincipal accountPrincipal = new AccountPrincipal((User) principal);
+            String token = jwtService.createToken(accountPrincipal);
+            response.addCookie(new Cookie(SecurityConstants.SSO_COOKIE_NAME, token));
+
+            LoginState loginState = new LoginState();
+            loginState.setToken(token);
+
+            serviceResponse.setSuccess(true);
+            serviceResponse.setData(loginState);
+        }
+        else
+            serviceResponse.setSuccess(false);
+
+        String resultJson = JsonSerializer.serialize(serviceResponse);
+        response.getWriter().println(resultJson);
+        response.flushBuffer();
     }
 }
